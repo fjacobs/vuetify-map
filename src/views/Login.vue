@@ -7,7 +7,7 @@
       <v-card-text>
         <v-form>
           <v-text-field
-            label="Replay interval:"
+            label="Replay interval"
             prepend-icon="mdi-account-circle"
           />
           <v-text-field
@@ -36,7 +36,7 @@ import Vue from 'vue'
 import HelloWorld from './components/HelloWorld.vue'
 
 export default Vue.extend({
-  name: 'App',
+  name: 'Login',
 
   components: {
   },
