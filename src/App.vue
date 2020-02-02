@@ -1,14 +1,11 @@
 <template>
-  <v-app>
     <v-container fluid>
     <v-card class="mx-auto mt-5">
       <v-card-title>
         <h1 class="display-1">Smart city map</h1>
       </v-card-title>
-      <v-image>
           <div id="myMap"/>
         <v-card-title>  <h1 class="display-1">Display date</h1> </v-card-title>
-      </v-image>
       <v-card-text>
 
         <v-form>
@@ -36,12 +33,10 @@
       </v-card-actions>
     </v-card>
     </v-container>
-  </v-app>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import HelloWorld from './components/HelloWorld.vue'
 import MapLoader from './cityservice/MapLoader'
 import TravelTimeService from './cityservice/TravelTime'
 import RSocketGeojsonClient from './rsocket/RsocketGeojsonClient'
