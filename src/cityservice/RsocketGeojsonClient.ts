@@ -71,14 +71,14 @@ export default class RSocketGeojsonClient {
     }
 
     // eslint-disable-next-line camelcase
-    getReq_n_FromSubscription () : any {
+    getReqNFromSubscription () : any {
       console.log('getRequestN callled returning ' + this.nextRequestN)
 
       return this.nextRequestN
     }
 
     // eslint-disable-next-line camelcase
-    setReq_n_OnSubscription (nextRequestN: any) {
+    setReqNOnSubscription (nextRequestN: any) {
       if ((nextRequestN > 0) && (this.nextRequestN === 0)) { // Start request it will be continued in onNext()
         this.subscription.request(nextRequestN)
       }

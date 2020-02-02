@@ -7,12 +7,13 @@ export default class TravelTimeService {
     private rsocketClient: RSocketGeojsonClient;
     private readonly map: google.maps;
     private googleMapsApi: any;
-    private currentPlayedDate: any;
+    private connMetaData: any;
 
-    constructor (map: google.maps.Map, api: google.maps, rSocketClient: RSocketGeojsonClient) {
+    constructor (map: google.maps.Map, api: google.maps, rSocketClient: RSocketGeojsonClient, connMetaData: any) {
       this.map = map
       this.googleMapsApi = api
       this.rsocketClient = rSocketClient
+      this.connMetaData = connMetaData
 
       map.data.addListener('addfeature', this.addFeatureEvent)
       map.data.addListener('setproperty', this.propertyChangeEvent)
@@ -32,16 +33,15 @@ export default class TravelTimeService {
       await this.rsocketClient.requestStream(route, this.addFeatureToMap.bind(this), this.onComplete.bind(this), null, 2147483647)
     }
 
-    async replaySubscription (route, metaData) {
-      this.currentPlayedDate = metaData
-      // console.error("currentPlayedDate" + this.currentPlayedDate);
+    async replaySubscription (route) {
+      // this.connMetaData = metaData
+      // console.error("connMetaData" + this.connMetaData);
 
       try {
         this.cancelSubscription()
-        await this.rsocketClient.requestStream(route, this.featureUpdateHandler.bind(this), this.onComplete.bind(this), metaData['replaySpeed'], 1)
+        await this.rsocketClient.requestStream(route, this.featureUpdateHandler.bind(this), this.onComplete.bind(this), this.connMetaData['replaySpeed'], 1)
       } catch (error) {
         console.error('replaySubscription -> error')
-
         console.error(error)
       }
     }
@@ -85,15 +85,12 @@ export default class TravelTimeService {
     featureUpdateHandler = (payload) => {
       console.log(payload.data.length)
       console.log(payload.data[0].pubDate)
-      //       console.log("this.currentPlayedDate2" + this.currentPlayedDate)
-      this.currentPlayedDate['currentPlayedDate'] = payload.data[0].pubDate
-      //    console.log("this.currentPlayedDate3" + this.currentPlayedDate)
-
+      this.connMetaData['currentPlayedDate'] = payload.data[0].pubDate
+      this.connMetaData.connInitialized = true
       payload.data.forEach((dto) => {
         if (dto !== undefined) {
           let feature = this.map.data.getFeatureById(dto.Id)
           if (feature !== undefined) {
-            console.log(feature.Id)
             for (let propName in dto) {
               feature.setProperty(propName, dto[propName])
             }
@@ -132,15 +129,17 @@ export default class TravelTimeService {
 
     cancelSubscription () {
       this.rsocketClient.cancelSubscription()
+      this.connMetaData.connInitialized = false
     }
 
     closeConnection () {
       this.rsocketClient.closeWebsocket()
+      this.connMetaData.connInitialized = false
     }
 
     addFeatureToMap = (payload) => {
       let feature = payload.data
-      this.map.data.addGeoJson(payload.data)
+      this.map.data.addGeoJson(feature)
     }
 
     propertyChangeEvent = (event) => {
