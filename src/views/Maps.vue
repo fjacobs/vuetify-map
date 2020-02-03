@@ -40,6 +40,7 @@
             <v-col cols="3">
               <template v-if="!replayMetaData.connInitialized">
 
+               Connecting...
                 <v-row align="justify-self">
                   <v-progress-linear
                     active=true
@@ -50,43 +51,45 @@
                 </v-row>
 
               </template>
-              <template v-else>
-              <v-btn-toggle v-model="toggle_one" mandatory>
+                <v-container>
+                  <v-row
+                    class="fill-height"
+                  >
+                    <v-scale-transition>
+                      <div
+                        v-if="replayMetaData.connInitialized"
+                        class="text-center"
+                      >
+                        <v-btn-toggle v-model="toggle_one" mandatory>
 
-                <v-btn :color="pauseReplay ? 'success' : 'grey' " @click="streamPause()" small>
-                  {{pauseResume}}
-                </v-btn>
-                <v-btn :color="rewindReplay ? 'success' : 'grey' " @click="streamRewind()" small>
-                  Rewind
-                </v-btn>
-                <v-btn :color="forwardReplay ? 'success' : 'grey' " @click="streamFastForward()" small>
-                  Fast Forward
-                </v-btn>
-
-              </v-btn-toggle>
-              </template>
-
+                          <v-btn :color="pauseReplay ? 'success' : 'grey' " @click="streamPause()" small>
+                            {{pauseResume}}
+                          </v-btn>
+                          <v-btn :color="rewindReplay ? 'success' : 'grey' " @click="streamRewind()" small>
+                            Rewind
+                          </v-btn>
+                          <v-btn :color="forwardReplay ? 'success' : 'grey' " @click="streamFastForward()" small>
+                            Fast Forward
+                          </v-btn>
+                          <v-col cols="4">
+                            <v-label>
+                              <p>
+                                <input v-model="replayMetaData.replaySpeed">
+                              </p>
+                            </v-label>
+                          </v-col>
+                          <v-row>
+                            <v-label><h1 class="display-1"> Display Time: {{replayMetaData.currentPlayedDate | dateFilter }} </h1>
+                            </v-label>
+                          </v-row>
+                        </v-btn-toggle>
+                      </div>
+                    </v-scale-transition>
+                  </v-row>
+                </v-container>
             </v-col>
-          <v-col cols="4">
-
-            <v-label>
-              <p>
-                <input v-model="replayMetaData.replaySpeed">
-              </p>
-
-            </v-label>
-          </v-col>
         </template>
-
       </v-row>
-      <template v-if="startReplay === true && replayMetaData.connInitialized">
-
-        <v-row justify="center">
-          <v-label><h1 class="display-1"> Display Time: {{replayMetaData.currentPlayedDate | dateFilter }} </h1>
-          </v-label>
-        </v-row>
-      </template>
-
     </v-container>
 
   </v-app>

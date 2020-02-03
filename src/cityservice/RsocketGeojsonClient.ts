@@ -18,7 +18,7 @@ export default class RSocketGeojsonClient {
       this.url = url
       this.guuid = uuidv1()
       const keepAlive = 60000
-      const lifetime = 180000
+      const lifetime = 60000
 
       this.client = new RSocketClient({
         serializers: {
