@@ -24,7 +24,7 @@
     "rsocket-types": "^0.0.16",
     "rsocket-websocket-client": "^0.0.18",
     "rsocket-websocket-server": "^0.0.18",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "moment-timezone": "^0.5.27"
   },
   "devDependencies": {
